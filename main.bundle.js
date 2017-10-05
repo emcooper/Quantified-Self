@@ -46,7 +46,6 @@
 
 	__webpack_require__(1);
 	__webpack_require__(5);
-	__webpack_require__(6);
 
 /***/ }),
 /* 1 */
@@ -401,32 +400,42 @@
 /***/ (function(module, exports) {
 
 	$(document).ready(function () {
-	  $(function () {
-	    $('.delete-row').click(function (event) {
-	      alert("hello");
-	      deleteFood(this.id);
-	    });
-	  });
-
-	  function deleteFood(id) {
-	    $.ajax({
-	      url: 'https://obscure-harbor-85447.herokuapp.com/api/v1/foods/' + id,
-	      type: 'DELETE'
-	    });
-	  }
+	  $(loadFoods);
 	});
 
-/***/ }),
-/* 6 */
-/***/ (function(module, exports) {
-
-	$(document).ready(function () {
+	function loadFoods() {
 	  $.get('https://obscure-harbor-85447.herokuapp.com/api/v1/foods').then(function (foods) {
 	    foods.forEach(function (food) {
-	      $('.foods-table').append('<tr><td>' + food.name + '</td>' + '<td>' + food.calories + '</td>' + "<td><input type='button' class='delete-row' value='Delete'/></button></td>" + "</tr>");
+	      $('.foods-table').append(`<tr class=row${food.id}><td>` + food.name + '</td>' + '<td>' + food.calories + '</td>' + `<td><input id=${food.id} type='button' class='delete-row' value='Delete'/></td>` + "</tr>");
 	    });
 	  });
+	}
+
+	function deleteFood(e) {
+	  $.ajax({
+	    type: 'DELETE',
+	    url: 'https://obscure-harbor-85447.herokuapp.com/api/v1/foods/' + e.target.id,
+	    success: $(`tr.row${e.target.id}`).remove()
+	  });
+	}
+
+	$('form').submit(function (e) {
+	  e.preventDefault();
+	  var food = $('input[name="food"]').val();
+	  var calories = $('input[name="calories"]').val();
+	  $.ajax({
+	    type: "POST",
+	    url: 'https://obscure-harbor-85447.herokuapp.com/api/v1/foods',
+	    data: { food: {
+	        name: $.trim(food),
+	        calories: $.trim(calories)
+	      } },
+	    success: function (data) {
+	      $('.foods-table').append('<tr><td>' + data.name + '</td>' + '<td>' + data.calories + '</td>' + `<td><input id=${data.id} type='button' class='delete-row' value='Delete'/></td>` + "</tr>");
+	    }
+	  });
 	});
+	$('.foods-table').on('click', '.delete-row', deleteFood);
 
 /***/ })
 /******/ ]);
