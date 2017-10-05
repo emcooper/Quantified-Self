@@ -45,6 +45,8 @@
 /***/ (function(module, exports, __webpack_require__) {
 
 	__webpack_require__(1);
+	__webpack_require__(5);
+	__webpack_require__(6);
 
 /***/ }),
 /* 1 */
@@ -393,6 +395,38 @@
 			URL.revokeObjectURL(oldSrc);
 	}
 
+
+/***/ }),
+/* 5 */
+/***/ (function(module, exports) {
+
+	$(document).ready(function () {
+	  $(function () {
+	    $('.delete-row').click(function (event) {
+	      alert("hello");
+	      deleteFood(this.id);
+	    });
+	  });
+
+	  function deleteFood(id) {
+	    $.ajax({
+	      url: 'https://obscure-harbor-85447.herokuapp.com/api/v1/foods/' + id,
+	      type: 'DELETE'
+	    });
+	  }
+	});
+
+/***/ }),
+/* 6 */
+/***/ (function(module, exports) {
+
+	$(document).ready(function () {
+	  $.get('https://obscure-harbor-85447.herokuapp.com/api/v1/foods').then(function (foods) {
+	    foods.forEach(function (food) {
+	      $('.foods-table').append('<tr><td>' + food.name + '</td>' + '<td>' + food.calories + '</td>' + "<td><input type='button' class='delete-row' value='Delete'/></button></td>" + "</tr>");
+	    });
+	  });
+	});
 
 /***/ })
 /******/ ]);
