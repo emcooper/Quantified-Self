@@ -1,9 +1,9 @@
 const assert = require('chai').assert;
 const meals = require('../lib/meals.js')
+global.$ = require('jquery')(window);
 
 
-describe('meals functionality', function(){
-  it ('totalCalories returns total calories of meal', function(){
+test('totalCalories returns total calories of meal', function(){
       meal = {name: "Breakfast", foods: [
         {name: "Grapes",
         calories: 100},
@@ -12,4 +12,3 @@ describe('meals functionality', function(){
       ]}
       assert.equal(totalCalories(meal), 300);
     })
-  })
