@@ -3,19 +3,24 @@
 <head>
   <meta charset="utf-8">
   <title>Quantified Self - Manage Foods</title>
-</head>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script></head>
 <body>
-  <table>
+  <table class='foods-table'>
     <tr>
       <th>Name</th>
       <th>Calories</th>
     </tr>
-    <tr>
-      <td>placeholder</td>
-      <td>placeholder</td>
-      <td><input type="submit" value="Delete"/></td>
-    </tr>
   </table>
-  <script src="main.bundle.js"></script>
+    <h3>Add Food</h3>
+    <form class='manage-food'>
+      <input type='text' name='food' class='food' placeholder='Food'><br><br>
+      <input type='text' name='calories' class='calories' placeholder='Calories'><br>
+      <input type='submit' class='add-food'>
+    </form>
+  </div>
+
+
+  <script src="main.bundle.js">
+  </script>
 </body>
 </html>

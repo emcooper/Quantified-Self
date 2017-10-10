@@ -45,111 +45,28 @@
 /***/ (function(module, exports, __webpack_require__) {
 
 	__webpack_require__(1);
-	__webpack_require__(2);
+	__webpack_require__(5);
+	__webpack_require__(6);
+	__webpack_require__(7);
 
 /***/ }),
 /* 1 */
-/***/ (function(module, exports) {
-
-	module.exports = { totalCalories };
-
-	var api_url = "https://obscure-harbor-85447.herokuapp.com/api/v1";
-
-	$(document).ready(function () {
-	  $.ajax({
-	    type: "GET",
-	    url: api_url + "/meals"
-	  }).then(function (meals) {
-	    renderMeals(meals);
-	    renderTotals(meals);
-	  }).catch(function (error) {
-	    console.error(error);
-	  });
-	});
-
-	function renderTotals(meals) {
-	  $('#totals-table').append("<table class='table table-bordered'><tbody>" + "<tr><th>Goal Calories</th><th>2000</th></tr>" + "<tr><th>Total Calories</th><th>" + allTotalCalories(meals) + "</th></tr>" + "<tr><th>Remaining Calories</th>" + allRemainingCalories(meals) + "</tr></tbody></table></div>");
-	}
-
-	function renderMeals(meals) {
-	  $.each(meals, function (index, meal) {
-	    $('#meals').append('<div class="col-md-6"><h3 class="text-center">' + meal["name"] + '</h3>' + "<table class='table table-bordered'><thead><tr><th>Name</th><th>Calories</th></tr></thead><tbody>" + generateFoodRows(meal) + "<tr><th>Total Calories</th><th>" + totalCalories(meal) + "<tr><th>Remaining Calories</th>" + remainingCalories(meal) + "</tr></tbody></table></div>");
-	  });
-	}
-
-	function generateFoodRows(meal) {
-	  rows = "";
-	  $.each(meal["foods"], function (index, food) {
-	    rows += "<tr><td>" + food["name"] + "</td><td>" + food["calories"] + "</td></tr>";
-	  });
-	  return rows;
-	}
-
-	function totalCalories(meal) {
-	  sum = 0;
-	  $.each(meal["foods"], function (index, food) {
-	    sum += food["calories"];
-	  });
-	  return sum;
-	}
-
-	function remainingCalories(meal) {
-	  var calories = 0;
-	  if (meal['name'] === 'Snack') {
-	    calories = 200 - totalCalories(meal);
-	  }
-	  if (meal['name'] === 'Breakfast') {
-	    calories = 400 - totalCalories(meal);
-	  }
-	  if (meal['name'] === 'Lunch') {
-	    calories = 600 - totalCalories(meal);
-	  }
-	  if (meal['name'] === 'Dinner') {
-	    calories = 800 - totalCalories(meal);
-	  }
-	  if (calories >= 0) {
-	    return "<th class='green-text'>" + calories + "</th>";
-	  }
-	  if (calories < 0) {
-	    return "<th class='red-text'>" + calories + "</th>";
-	  }
-	}
-
-	function allTotalCalories(meals) {
-	  var sum = meals.reduce(function (accumulator, meal) {
-	    return accumulator + totalCalories(meal);
-	  }, 0);
-	  return sum;
-	}
-
-	function allRemainingCalories(meals) {
-	  remaining = 2000 - allTotalCalories(meals);
-	  if (remaining >= 0) {
-	    return "<th class='green-text'>" + remaining + "</th>";
-	  }
-	  if (remaining < 0) {
-	    return "<th class='red-text'>" + remaining + "</th>";
-	  }
-	}
-
-/***/ }),
-/* 2 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(3);
+	var content = __webpack_require__(2);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
-	var update = __webpack_require__(5)(content, {});
+	var update = __webpack_require__(4)(content, {});
 	if(content.locals) module.exports = content.locals;
 	// Hot Module Replacement
 	if(false) {
 		// When the styles change, update the <style> tags
 		if(!content.locals) {
-			module.hot.accept("!!../node_modules/css-loader/index.js!../node_modules/sass-loader/index.js!./application.scss", function() {
-				var newContent = require("!!../node_modules/css-loader/index.js!../node_modules/sass-loader/index.js!./application.scss");
+			module.hot.accept("!!../../node_modules/css-loader/index.js!../../node_modules/sass-loader/index.js!./foods.scss", function() {
+				var newContent = require("!!../../node_modules/css-loader/index.js!../../node_modules/sass-loader/index.js!./foods.scss");
 				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 				update(newContent);
 			});
@@ -159,21 +76,21 @@
 	}
 
 /***/ }),
-/* 3 */
+/* 2 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	exports = module.exports = __webpack_require__(4)();
+	exports = module.exports = __webpack_require__(3)();
 	// imports
 
 
 	// module
-	exports.push([module.id, ".green-text {\n  color: green; }\n\n.red-text {\n  color: red; }\n", ""]);
+	exports.push([module.id, "table, th, td {\n  border: 1px solid black; }\n", ""]);
 
 	// exports
 
 
 /***/ }),
-/* 4 */
+/* 3 */
 /***/ (function(module, exports) {
 
 	/*
@@ -229,7 +146,7 @@
 
 
 /***/ }),
-/* 5 */
+/* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	/*
@@ -478,6 +395,208 @@
 		if(oldSrc)
 			URL.revokeObjectURL(oldSrc);
 	}
+
+
+/***/ }),
+/* 5 */
+/***/ (function(module, exports) {
+
+	$(document).ready(function () {
+	  $(loadFoods);
+	});
+
+	function loadFoods() {
+	  $.get('https://obscure-harbor-85447.herokuapp.com/api/v1/foods').then(function (foods) {
+	    foods.forEach(function (food) {
+	      $('.foods-table').append(`<tr class=row${food.id}>
+	          <td contenteditable='true' >${food.name}</td>
+	          <td contenteditable='true'>${food.calories}</td>
+	          <td><input id=${food.id} type='button' class='delete-row' value='Delete'/></td>
+	        </tr>`);
+	    });
+	  });
+	}
+
+	// function updateFoodName(id, value) {
+	//   $.ajax({
+	//     type: 'PATCH',
+	//     url: ''
+	//   })
+	// }
+	//
+	// function updateFoodCalories(id, value) {
+	//
+	// }
+	function deleteFood(e) {
+	  $.ajax({
+	    type: 'DELETE',
+	    url: 'https://obscure-harbor-85447.herokuapp.com/api/v1/foods/' + e.target.id,
+	    success: $(`tr.row${e.target.id}`).remove()
+	  });
+	}
+
+	$('form').submit(function (e) {
+	  e.preventDefault();
+	  var food = $('input[name="food"]').val();
+	  var calories = $('input[name="calories"]').val();
+	  $('.manage-food').each(function () {
+	    this.reset();
+	  });
+	  $('p.food-error').remove();
+
+	  $.ajax({
+	    type: "POST",
+	    url: 'https://obscure-harbor-85447.herokuapp.com/api/v1/foods',
+	    data: { food: {
+	        name: $.trim(food),
+	        calories: $.trim(calories)
+	      } },
+	    success: function (data) {
+	      $('.foods-table').append('<tr><td>' + data.name + '</td>' + '<td>' + data.calories + '</td>' + `<td><input id=${data.id} type='button' class='delete-row' value='Delete'/></td>` + "</tr>");
+	    },
+	    error: function (error) {
+	      if (error.responseText.includes('name') && error.responseText.includes('calories')) {
+	        $('input.food').after('<p class="food-error">Please enter a food name</p>');
+	        $('input.calories').after('<p class="food-error">Please enter a calorie amount</p>');
+	      } else if (error.responseText.includes('name')) {
+	        $('input.food').after('<p class="food-error">Please enter a food name</p>');
+	      } else {
+	        $('input.calories').after('<p class="food-error">Please enter a calorie amount</p>');
+	      }
+	    }
+	  });
+	});
+	$('.foods-table').on('click', '.delete-row', deleteFood);
+	// $('td[contenteditable=true]').on('blur', function() {
+	//   $.ajax({
+	//     type: 'PATCH',
+	//     url: `https://obscure-harbor-85447.herokuapp.com/api/v1/foods/${}`
+	//   })
+	// })
+
+/***/ }),
+/* 6 */
+/***/ (function(module, exports) {
+
+	module.exports = { totalCalories };
+
+	var api_url = "https://obscure-harbor-85447.herokuapp.com/api/v1";
+
+	$(document).ready(function () {
+	  $.ajax({
+	    type: "GET",
+	    url: api_url + "/meals"
+	  }).then(function (meals) {
+	    renderMeals(meals);
+	    renderTotals(meals);
+	  }).catch(function (error) {
+	    console.error(error);
+	  });
+	});
+
+	function renderTotals(meals) {
+	  $('#totals-table').append("<table class='table table-bordered'><tbody>" + "<tr><th>Goal Calories</th><th>2000</th></tr>" + "<tr><th>Total Calories</th><th>" + allTotalCalories(meals) + "</th></tr>" + "<tr><th>Remaining Calories</th>" + allRemainingCalories(meals) + "</tr></tbody></table></div>");
+	}
+
+	function renderMeals(meals) {
+	  $.each(meals, function (index, meal) {
+	    $('#meals').append('<div class="col-md-6"><h3 class="text-center">' + meal["name"] + '</h3>' + "<table class='table table-bordered'><thead><tr><th>Name</th><th>Calories</th></tr></thead><tbody>" + generateFoodRows(meal) + "<tr><th>Total Calories</th><th>" + totalCalories(meal) + "<tr><th>Remaining Calories</th>" + remainingCalories(meal) + "</tr></tbody></table></div>");
+	  });
+	}
+
+	function generateFoodRows(meal) {
+	  rows = "";
+	  $.each(meal["foods"], function (index, food) {
+	    rows += "<tr><td>" + food["name"] + "</td><td>" + food["calories"] + "</td></tr>";
+	  });
+	  return rows;
+	}
+
+	function totalCalories(meal) {
+	  sum = 0;
+	  $.each(meal["foods"], function (index, food) {
+	    sum += food["calories"];
+	  });
+	  return sum;
+	}
+
+	function remainingCalories(meal) {
+	  var calories = 0;
+	  if (meal['name'] === 'Snack') {
+	    calories = 200 - totalCalories(meal);
+	  }
+	  if (meal['name'] === 'Breakfast') {
+	    calories = 400 - totalCalories(meal);
+	  }
+	  if (meal['name'] === 'Lunch') {
+	    calories = 600 - totalCalories(meal);
+	  }
+	  if (meal['name'] === 'Dinner') {
+	    calories = 800 - totalCalories(meal);
+	  }
+	  if (calories >= 0) {
+	    return "<th class='green-text'>" + calories + "</th>";
+	  }
+	  if (calories < 0) {
+	    return "<th class='red-text'>" + calories + "</th>";
+	  }
+	}
+
+	function allTotalCalories(meals) {
+	  var sum = meals.reduce(function (accumulator, meal) {
+	    return accumulator + totalCalories(meal);
+	  }, 0);
+	  return sum;
+	}
+
+	function allRemainingCalories(meals) {
+	  remaining = 2000 - allTotalCalories(meals);
+	  if (remaining >= 0) {
+	    return "<th class='green-text'>" + remaining + "</th>";
+	  }
+	  if (remaining < 0) {
+	    return "<th class='red-text'>" + remaining + "</th>";
+	  }
+	}
+
+/***/ }),
+/* 7 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	// style-loader: Adds some css to the DOM by adding a <style> tag
+
+	// load the styles
+	var content = __webpack_require__(8);
+	if(typeof content === 'string') content = [[module.id, content, '']];
+	// add the styles to the DOM
+	var update = __webpack_require__(4)(content, {});
+	if(content.locals) module.exports = content.locals;
+	// Hot Module Replacement
+	if(false) {
+		// When the styles change, update the <style> tags
+		if(!content.locals) {
+			module.hot.accept("!!../node_modules/css-loader/index.js!../node_modules/sass-loader/index.js!./application.scss", function() {
+				var newContent = require("!!../node_modules/css-loader/index.js!../node_modules/sass-loader/index.js!./application.scss");
+				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+				update(newContent);
+			});
+		}
+		// When the module is disposed, remove the <style> tags
+		module.hot.dispose(function() { update(); });
+	}
+
+/***/ }),
+/* 8 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	exports = module.exports = __webpack_require__(3)();
+	// imports
+
+
+	// module
+	exports.push([module.id, ".green-text {\n  color: green; }\n\n.red-text {\n  color: red; }\n", ""]);
+
+	// exports
 
 
 /***/ })
