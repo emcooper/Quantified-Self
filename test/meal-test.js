@@ -1,6 +1,5 @@
 const assert = require('chai').assert;
 const meals = require('../lib/meals.js')
-global.$ = require('jquery')(window);
 
 
 test('totalCalories returns total calories of meal', function(){
