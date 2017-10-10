@@ -60,7 +60,22 @@
 	  removeFood();
 	});
 
-	function removeFood() {}
+	function removeFood() {
+	  $("#meals").on("click", function (event) {
+	    var foodId = event.target.id;
+	    var mealId = event.target.data;
+	    console.log(mealId);
+	    $.ajax({
+	      type: "DELETE",
+	      url: api_url + "/meals/" + ":meal_id/foods/:id "
+	    }).then(function (meals) {
+	      renderMeals(meals);
+	      renderTotals(meals);
+	    }).catch(function (error) {
+	      console.error(error);
+	    });
+	  });
+	}
 
 	function renderDiary() {
 	  $.ajax({
@@ -87,7 +102,7 @@
 	function generateFoodRows(meal) {
 	  rows = "";
 	  $.each(meal["foods"], function (index, food) {
-	    rows += "<tr><td>" + food["name"] + "</td><td>" + food["calories"] + "</td></tr><td>" + +"</td>";
+	    rows += "<tr><td>" + food["name"] + "</td><td>" + food["calories"] + "</td><td><i class='fa fa-minus-circle' id= " + food["id"] + "data=" + meal["id"] + " aria-hidden='true'></i></td></tr>";
 	  });
 	  return rows;
 	}
@@ -174,7 +189,7 @@
 
 
 	// module
-	exports.push([module.id, ".green-text {\n  color: green; }\n\n.red-text {\n  color: red; }\n", ""]);
+	exports.push([module.id, ".green-text {\n  color: green; }\n\n.red-text {\n  color: red; }\n\n.fa-minus-circle {\n  color: red; }\n", ""]);
 
 	// exports
 
