@@ -56,6 +56,13 @@
 	var api_url = "https://obscure-harbor-85447.herokuapp.com/api/v1";
 
 	$(document).ready(function () {
+	  renderDiary();
+	  removeFood();
+	});
+
+	function removeFood() {}
+
+	function renderDiary() {
 	  $.ajax({
 	    type: "GET",
 	    url: api_url + "/meals"
@@ -65,7 +72,7 @@
 	  }).catch(function (error) {
 	    console.error(error);
 	  });
-	});
+	}
 
 	function renderTotals(meals) {
 	  $('#totals-table').append("<table class='table table-bordered'><tbody>" + "<tr><th>Goal Calories</th><th>2000</th></tr>" + "<tr><th>Total Calories</th><th>" + allTotalCalories(meals) + "</th></tr>" + "<tr><th>Remaining Calories</th>" + allRemainingCalories(meals) + "</tr></tbody></table></div>");
@@ -80,7 +87,7 @@
 	function generateFoodRows(meal) {
 	  rows = "";
 	  $.each(meal["foods"], function (index, food) {
-	    rows += "<tr><td>" + food["name"] + "</td><td>" + food["calories"] + "</td></tr>";
+	    rows += "<tr><td>" + food["name"] + "</td><td>" + food["calories"] + "</td></tr><td>" + +"</td>";
 	  });
 	  return rows;
 	}
