@@ -51,6 +51,8 @@
 /* 1 */
 /***/ (function(module, exports) {
 
+	module.exports = { totalCalories };
+
 	var api_url = "https://obscure-harbor-85447.herokuapp.com/api/v1";
 
 	$(document).ready(function () {
@@ -59,10 +61,15 @@
 	    url: api_url + "/meals"
 	  }).then(function (meals) {
 	    renderMeals(meals);
+	    renderTotals(meals);
 	  }).catch(function (error) {
 	    console.error(error);
 	  });
 	});
+
+	function renderTotals(meals) {
+	  $('#totals-table').append("<table class='table table-bordered'><tbody>" + "<tr><th>Goal Calories</th><th>2000</th></tr>" + "<tr><th>Total Calories</th><th>" + allTotalCalories(meals) + "</th></tr>" + "<tr><th>Remaining Calories</th>" + allRemainingCalories(meals) + "</tr></tbody></table></div>");
+	}
 
 	function renderMeals(meals) {
 	  $.each(meals, function (index, meal) {
@@ -105,6 +112,23 @@
 	  }
 	  if (calories < 0) {
 	    return "<th class='red-text'>" + calories + "</th>";
+	  }
+	}
+
+	function allTotalCalories(meals) {
+	  var sum = meals.reduce(function (accumulator, meal) {
+	    return accumulator + totalCalories(meal);
+	  }, 0);
+	  return sum;
+	}
+
+	function allRemainingCalories(meals) {
+	  remaining = 2000 - allTotalCalories(meals);
+	  if (remaining >= 0) {
+	    return "<th class='green-text'>" + remaining + "</th>";
+	  }
+	  if (remaining < 0) {
+	    return "<th class='red-text'>" + remaining + "</th>";
 	  }
 	}
 
