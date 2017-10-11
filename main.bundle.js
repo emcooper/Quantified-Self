@@ -402,36 +402,36 @@
 /***/ (function(module, exports) {
 
 	$(document).ready(function () {
-	  $(loadFoods);
+	  loadFoods();
+	  $('.foods-table').on('click', '.delete-row', deleteFood);
 	});
 
 	function loadFoods() {
 	  $.get('https://obscure-harbor-85447.herokuapp.com/api/v1/foods').then(function (foods) {
 	    foods.forEach(function (food) {
 	      $('.foods-table').append(`<tr class=row${food.id}>
-	          <td contenteditable='true' >${food.name}</td>
-	          <td contenteditable='true'>${food.calories}</td>
+	          <td class='food-name' contenteditable>${food.name}</td>
+	          <td class='food-calories' contenteditable>${food.calories}</td>
 	          <td><input id=${food.id} type='button' class='delete-row' value='Delete'/></td>
 	        </tr>`);
 	    });
 	  });
 	}
 
-	// function updateFoodName(id, value) {
-	//   $.ajax({
-	//     type: 'PATCH',
-	//     url: ''
-	//   })
-	// }
-	//
-	// function updateFoodCalories(id, value) {
-	//
-	// }
+	function updateFoodName(id, value) {
+	  $.ajax({
+	    type: 'PATCH',
+	    url: `https://obscure-harbor-85447.herokuapp.com/api/v1/foods/${id}`,
+	    data: { food: { name: value } }
+	  });
+	}
+
+	function updateFoodCalories(id, value) {}
 	function deleteFood(e) {
 	  $.ajax({
 	    type: 'DELETE',
 	    url: 'https://obscure-harbor-85447.herokuapp.com/api/v1/foods/' + e.target.id,
-	    success: $(`tr.row${e.target.id}`).remove()
+	    success: $(`.foods-table .row${e.target.id}`).remove()
 	  });
 	}
 
@@ -452,27 +452,32 @@
 	        calories: $.trim(calories)
 	      } },
 	    success: function (data) {
-	      $('.foods-table').append('<tr><td>' + data.name + '</td>' + '<td>' + data.calories + '</td>' + `<td><input id=${data.id} type='button' class='delete-row' value='Delete'/></td>` + "</tr>");
+	      postSuccess(data);
 	    },
 	    error: function (error) {
-	      if (error.responseText.includes('name') && error.responseText.includes('calories')) {
-	        $('input.food').after('<p class="food-error">Please enter a food name</p>');
-	        $('input.calories').after('<p class="food-error">Please enter a calorie amount</p>');
-	      } else if (error.responseText.includes('name')) {
-	        $('input.food').after('<p class="food-error">Please enter a food name</p>');
-	      } else {
-	        $('input.calories').after('<p class="food-error">Please enter a calorie amount</p>');
-	      }
+	      postError(error);
 	    }
 	  });
 	});
-	$('.foods-table').on('click', '.delete-row', deleteFood);
-	// $('td[contenteditable=true]').on('blur', function() {
-	//   $.ajax({
-	//     type: 'PATCH',
-	//     url: `https://obscure-harbor-85447.herokuapp.com/api/v1/foods/${}`
-	//   })
-	// })
+
+	function postSuccess(data) {
+	  $('.foods-table').append(`<tr class=row${data.id}>
+	      <td class='food-name' contenteditable='true'>${data.name}</td>
+	      <td class='food-calories' contenteditable='true'>${data.calories}</td>
+	      <td><input id=${data.id} type='button' class='delete-row' value='Delete'/></td>
+	    </tr>`);
+	}
+
+	function postError(error) {
+	  if (error.responseText.includes('name') && error.responseText.includes('calories')) {
+	    $('input.food').after('<p class="food-error">Please enter a food name</p>');
+	    $('input.calories').after('<p class="food-error">Please enter a calorie amount</p>');
+	  } else if (error.responseText.includes('name')) {
+	    $('input.food').after('<p class="food-error">Please enter a food name</p>');
+	  } else {
+	    $('input.calories').after('<p class="food-error">Please enter a calorie amount</p>');
+	  }
+	}
 
 /***/ }),
 /* 6 */
