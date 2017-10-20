@@ -10414,7 +10414,7 @@
 /***/ (function(module, exports, __webpack_require__) {
 
 	const $ = __webpack_require__(2);
-	const api = 'https://calory-tracker.herokuapp.com/';
+	const api = 'https://calory-tracker.herokuapp.com';
 	const handlers = __webpack_require__(1);
 
 	function createFood(food, calories) {
