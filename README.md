@@ -1,6 +1,6 @@
 # Quantified Self
 
-This project is the frontend of a single user calory tracking application built in NodeJS and Express. The backend can be viewed at https://github.com/emcooper/qs-backend.
+This project is the frontend of a single user calory tracking application built in jQuery and Vanilla JS. The backend can be viewed at https://github.com/emcooper/qs-backend.
 
 ## To Run the App Locally
 1. Clone this repo
