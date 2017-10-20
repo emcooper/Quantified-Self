@@ -10348,7 +10348,7 @@
 	const createFood = __webpack_require__(4);
 	const handlers = __webpack_require__(1);
 	const requests = __webpack_require__(4);
-	const url = 'https://obscure-harbor-85447.herokuapp.com';
+	const url = 'https://calory-tracker.herokuapp.com';
 
 	$(document).ready(function () {
 	  loadFoods();
@@ -10414,7 +10414,7 @@
 /***/ (function(module, exports, __webpack_require__) {
 
 	const $ = __webpack_require__(2);
-	const api = 'https://obscure-harbor-85447.herokuapp.com/';
+	const api = 'https://calory-tracker.herokuapp.com/';
 	const handlers = __webpack_require__(1);
 
 	function createFood(food, calories) {
