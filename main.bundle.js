@@ -10420,7 +10420,7 @@
 	function createFood(food, calories) {
 	  $.ajax({
 	    type: "POST",
-	    url: `${api}api/v1/foods`,
+	    url: `${api}/api/v1/foods`,
 	    data: { food: {
 	        name: $.trim(food),
 	        calories: $.trim(calories)
@@ -10448,7 +10448,7 @@
 	function deleteFood(e) {
 	  $.ajax({
 	    type: 'DELETE',
-	    url: `${api}api/v1/foods/${e.target.id}`,
+	    url: `${api}/api/v1/foods/${e.target.id}`,
 	    success: $(`.foods-table .row${e.target.id}`).remove(),
 	    error: function () {
 	      deleteFoodFromMeals(this.url);
@@ -10469,7 +10469,7 @@
 	  });
 	  $.ajax({
 	    type: 'GET',
-	    url: `${api}api/v1/meals`,
+	    url: `${api}/api/v1/meals`,
 	    success: function (data) {
 	      meals = data;
 	    },
@@ -10483,13 +10483,13 @@
 	    if (idsOfFood.includes(food.id)) {
 	      $.ajax({
 	        type: 'DELETE',
-	        url: `${api}api/v1/meals/${meal.id}/foods/${food.id}`,
+	        url: `${api}/api/v1/meals/${meal.id}/foods/${food.id}`,
 	        success: function (data) {}
 	      });
 
 	      $.ajax({
 	        type: 'DELETE',
-	        url: `${api}api/v1/foods/${food.id}`,
+	        url: `${api}/api/v1/foods/${food.id}`,
 	        success: $(`.foods-table .row${food.id}`).remove()
 	      });
 	    }
