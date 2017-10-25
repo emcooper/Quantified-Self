@@ -10538,11 +10538,16 @@
 	    type: "GET",
 	    url: `${apiUrl}/foods`
 	  }).then(function (foods) {
-	    $('#foods-table').children().html('');
+	    clearFoodElements();
 	    renderFoodTable(foods);
 	  }).catch(function (error) {
 	    console.error(error);
 	  });
+	}
+
+	function clearFoodElements() {
+	  $('#foods-table').html('');
+	  $('#foods-table-headers').html('');
 	}
 
 	function renderFoodTable(foods) {
@@ -10588,7 +10593,6 @@
 	}
 
 	function renderAddButtons(meals) {
-
 	  $.each(meals, function (index, meal) {
 	    $("#add-selected").append(`<button type='button' name='button' class='btn btn-primary' mealId="
 	                              ${meal["id"]}">${meal["name"]}</button>`);
@@ -10646,16 +10650,16 @@
 
 	function remainingCalories(meal) {
 	  let calories = 0;
-	  if (meal['name'] === 'Snack') {
+	  if (meal['name'] === 'snack') {
 	    calories = 200 - totalCalories(meal);
 	  }
-	  if (meal['name'] === 'Breakfast') {
+	  if (meal['name'] === 'breakfast') {
 	    calories = 400 - totalCalories(meal);
 	  }
-	  if (meal['name'] === 'Lunch') {
+	  if (meal['name'] === 'lunch') {
 	    calories = 600 - totalCalories(meal);
 	  }
-	  if (meal['name'] === 'Dinner') {
+	  if (meal['name'] === 'dinner') {
 	    calories = 800 - totalCalories(meal);
 	  }
 	  if (calories >= 0) {
