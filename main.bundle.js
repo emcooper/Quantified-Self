@@ -58,7 +58,7 @@
 	const $ = __webpack_require__(2);
 
 	function postSuccess(data) {
-	  appendFood(data);
+	  appendFood(data[0]);
 	}
 
 	function postError(error) {
@@ -10414,7 +10414,8 @@
 /***/ (function(module, exports, __webpack_require__) {
 
 	const $ = __webpack_require__(2);
-	const api = 'https://calory-tracker.herokuapp.com';
+	// const api = 'https://calory-tracker.herokuapp.com'
+	const api = 'http://localhost:3000';
 	const handlers = __webpack_require__(1);
 
 	function createFood(food, calories) {
